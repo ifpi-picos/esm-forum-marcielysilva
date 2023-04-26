@@ -58,8 +58,51 @@ app.post('/respostas', (req, res) => {
   } 
 });
 
+app.get('/perguntas/editar', (req, res) => {
+  try {
+    const id = req.query.id_pergunta;
+    // const perguntas = req.body.novaPerguntas;
+    const pergunta = modelo.get_pergunta(id);
+    res.render('editarPergunta', {
+      pergunta
+    });
+  }
+  catch(erro) {
+    res.status(500).json(erro.message); 
+  } 
+});
+
+//É um post que edita
+app.post('/pergunta', (req, res) => {
+  try {
+    const id = req.body.id_pergunta;
+    const novaPergunta = req.body.novaPergunta;
+    console.log(novaPergunta)
+    console.log(id)
+    const pergunta = modelo.editar_pergunta(id, novaPergunta);
+    res.render('pergunta-sucesso', {
+      pergunta
+    });
+  }
+  catch(erro) {
+    res.status(500).json(erro.message); 
+  } 
+});
+
+//é um get que deleta
+app.get('/perguntas', (req, res) => {
+  try {
+    const id_pergunta = req.query.id_pergunta;
+    modelo.remover_pergunta(id_pergunta);
+    res.render('pergunta-sucesso');
+  }
+  catch(erro) {
+    res.status(500).json(erro.message); 
+  } 
+});
+
 // espera e trata requisições de clientes
 const port = 3000;
 app.listen(port, 'localhost', () => {
-  console.log(`ESM Forum rodando na porta ${port}`)
+  console.log(`ESM Forum rodando na porta ${port}. Link: http://localhost:3000`)
 });
